@@ -8,7 +8,7 @@ var options = {
     //'connectionLimit': config.maxConnLimit,
     //'supportBigNumbers': true,
     //'bigNumberStrings': true
-    //测试下提交
+    //测试下提交11111111
 };
 
 exports.dbconfig = options;
