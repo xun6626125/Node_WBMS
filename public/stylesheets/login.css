@@ -1,0 +1,461 @@
+@charset "utf-8";
+
+
+
+* {
+
+	margin: 0;
+
+	padding: 0;
+
+	font-family: 微软雅黑;
+
+	font-size: 12px;
+
+}
+
+
+
+img {
+
+	border: none;
+
+}
+
+
+
+:focus {
+
+	outline: none;
+
+}
+
+
+
+.fl {
+
+	float: left;
+
+}
+
+
+
+.fr {
+
+	float: right;
+
+}
+
+
+
+.clear {
+
+	clear: both;
+
+}
+
+
+
+body {
+
+	background: #97d4cd url(../images/login/login_body_bg.png) left top
+
+		repeat-x;
+
+}
+
+
+
+.login {
+
+	width: 800px;
+
+	height: 478px;
+
+	margin: 113px auto;
+
+}
+
+
+
+.login .bg {
+
+	width: 609px;
+
+	height: 478px;
+
+	margin-left: 165px;
+
+	background: url(../images/login/login_bg.png) center top no-repeat;
+
+}
+
+
+
+.login .logo {
+
+	width: 157px;
+
+	height: 80px;
+
+	float: left;
+
+}
+
+
+
+.login .logo img {
+
+	width: 157px;
+
+	height: 44px;
+
+	margin-top: 8px;
+
+}
+
+
+
+.login .logo_text a {
+
+	width: 400px;
+
+	height: 55px;
+
+	float: left;
+
+	margin-top: 18px;
+
+	margin-left: 5px;
+
+	color: #006F6B;
+
+	font-size: 20px;
+
+	font-weight: bold;
+
+	text-decoration: none;
+
+	padding-left: 10px;
+
+	line-height: 45px;
+
+}
+
+
+
+.login .bg .fill {
+
+	width: 220px;
+
+	height: 120px;
+
+	float: left;
+
+	margin-top: 60px;
+
+	margin-left: 155px;
+
+}
+
+
+
+.login .bg .fill .input1 {
+
+	padding: 7px 6px;
+
+	width: 200px;
+
+	background: #bee5da;
+
+	border: none;
+
+	outline: none;
+
+	color: #666;
+
+	font-weight: bold;
+
+}
+
+
+
+.login .bg .fill .input2 {
+
+	padding: 7px 6px;
+
+	width: 200px;
+
+	background: #bee5da;
+
+	border: none;
+
+	outline: none;
+
+	color: #666;
+
+}
+
+
+
+.login .bg .error {
+
+	float: left;
+
+	clear: both;
+
+	width: 275px;
+
+	height: 30px;
+
+	margin-left: 100px;
+
+	line-height: 24px;
+
+	text-align: left;
+
+	color: #eee;
+
+	font-size: 14px;
+
+}
+
+
+
+.login .bg .btn {
+
+	width: 275px;
+
+	float: left;
+
+	margin-left: 100px;
+
+	clear: both;
+
+}
+
+
+
+.login .bg .btn .btn_login {
+
+	display: block;
+
+	float: right;
+
+	width: 95px;
+
+	height: 37px;
+
+	margin-right: 5px;
+
+	margin-top: -60px;
+
+	text-align: center;
+
+	line-height: 37px;
+
+	color: #fff;
+
+	font-size: 18px;
+
+	text-decoration: none;
+
+	background: url(../images/login/btn_login.png) 0 0 no-repeat;
+
+	border: none !important;
+
+}
+
+
+
+.login .bg .btn .btn_login:hover {
+
+	background: url(../images/login/btn_login.png) 0 -37px no-repeat
+
+		!important;
+
+}
+
+
+
+.login .copyright {
+
+	padding-top: 60px;
+
+	text-align: center;
+
+	color: #006f6b;
+
+}
+
+
+
+/*语言切换 开始*/
+
+.login .bg {
+
+	position: relative;
+
+}
+
+
+
+.login .bg .lan {
+
+	position: absolute;
+
+	top: 95px;
+
+	left: 370px;
+
+	width: 100px;
+
+	height: 20px;
+
+}
+
+
+
+.login .bg .lan a {
+
+	margin-right: 10px;
+
+	color: #9ee3a4;
+
+	font-size: 12px;
+
+	text-decoration: none;
+
+	font-weight: bold;
+
+}
+
+
+
+.login .bg .lan a:hover {
+
+	color: #fff;
+
+	text-decoration: underline;
+
+	font-weight: bold;
+
+}
+
+
+
+.login .bg .lan a.select {
+
+	color: #fff;
+
+}
+
+
+
+/*语言切换 结束*/
+
+.login .verify_wrap {
+
+	width: 275px;
+
+	margin-left: 100px;
+
+	line-height: 24px;
+
+	text-align: left;
+
+	color: #c02d05;
+
+	font-size: 14px;
+
+}
+
+
+
+.login .verify_wrap .verify {
+
+	display: block;
+
+	float: left;
+
+	clear: both;
+
+}
+
+
+
+.login .verify_wrap .verify input {
+
+	background: #98D39D;
+
+	border: 1px solid #119c20;
+
+	padding: 3px;
+
+	color: #000000;
+
+	font-weight: bold;
+
+	width: 75px;
+
+	float: left;
+
+	margin-right: 10px;
+
+	color: #030;
+
+}
+
+
+
+.login.verify_wrap .verify span {
+
+	display: block;
+
+	float: left;
+
+	width: 52px;
+
+	height: 28px;
+
+	margin-left: 5px;
+
+}
+
+
+
+.login .bg .btn .btn_login {
+
+	float: right;
+
+	margin-top: -60px;
+
+	width: 107px;
+
+	background: url(../images/login/btn_login.png) 0 0 no-repeat;
+
+}
+
+
+
+.login .bg .btn .btn_login:hover {
+
+	background: url(../images/login/btn_login.png) 0 -37px no-repeat
+
+		!important;
+
+}
+
+
+
+.login .bg .error {
+
+	height: 30px;
+
+	line-height: 24px;
+
+	font-size: 14px;
+
+	margin-bottom: 3px;
+
+}

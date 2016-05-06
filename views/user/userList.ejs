@@ -1,0 +1,302 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,Chrom"/>
+    <link rel="stylesheet" href="stylesheets/crm.css" type="text/css">
+	<link rel="stylesheet" href="stylesheets/iconfont.css" type="text/css">
+	<link rel="stylesheet" href="common/bootstrap/css/bootstrap.css">
+    <link rel="stylesheet" href="common/bootstrap-table/src/bootstrap-table.css">
+	<link rel="stylesheet" href="common/bootstrap-validator/css/bootstrapValidator.min.css">
+	<link rel="stylesheet" href="common/toastr/toastr.css">
+    <script type="text/javascript" src="common/jquery/jquery.min.js"></script>
+	<script type="text/javascript" src="common/jquery/jquery.form.min.js"></script>
+    <script type="text/javascript" src="common/bootstrap/js/respond.js"></script>
+    <script type="text/javascript" src="common/bootstrap/js/bootstrap.js"></script>
+    <script type="text/javascript" src="common/bootstrap-table/src/bootstrap-table.js"></script>
+	<script type="text/javascript" src="common/bootstrap-validator/js/bootstrapValidator.min.js"></script>
+	<script type="text/javascript" src="common/toastr/toastr.min.js"></script>
+    <script type="text/javascript">
+  	function rowStyle(row, index){
+        if (!(index % 2 == 0)) {
+            return {
+                classes: 'lineStyle'
+            };
+        }
+        return {classes: 'nolineStyle'};
+    }
+    
+    function showUserConfig(row){
+		if(row){
+			$("#userid").val(row['id']);
+			$("#username").val(row['username']);
+			$("#oldusername").val(row['username']);
+			$("#password").val(row['password']);
+		}else{
+			$("#userConfigForm")[0].reset();
+		}
+		$("#userConfigForm").data('bootstrapValidator').resetForm();
+    	var id = "userWinId";
+    	$('.modalId').attr("id", id);//主窗口标识
+    	$('#'+id).modal('show');
+    }
+
+	function saveUser(){
+		$("#userConfigForm").submit();
+	}
+
+	function getUserListJson(){
+		$.ajax({
+			url: "/getUserListJson",//"",
+			type: "post",
+			dataType: "json",
+			success: function (data) {
+				//JSON.stringify(data)
+				$('#table').bootstrapTable('load', data);
+			}
+		});
+	}
+
+	function getIdSelections() {
+		return $.map($('#table').bootstrapTable('getSelections'), function (row) {
+			return row.id
+		});
+	}
+
+	function getHeight() {
+		return $(window).height() - $('.foot').outerHeight(true)-$('.head').outerHeight(true)-45;
+	}
+
+	function operateFormatter(value, row, index) {
+		return [
+			'<a class="like" href="javascript:void(0)" title="编辑">',
+			'<i class="glyphicon glyphicon-edit" style="color: #a0ce4e"></i>',
+			'</a>  ',
+			'<a class="remove" href="javascript:void(0)" title="删除">',
+			'<i class="glyphicon glyphicon-remove" style="color: #a0ce4e"></i>',
+			'</a>'
+		].join('');
+	}
+
+	window.operateEvents = {
+		'click .like': function (e, value, row, index) {
+			alert('You click like action, row: ' + JSON.stringify(row));
+			showUserConfig(row);
+		},
+		'click .remove': function (e, value, row, index) {
+			toastr.confirm("您确定执行删除的操作吗?", function(){
+				deleteUser(row.id, 0);
+			})
+		}
+	};
+
+	function deleteUser(ids, type){
+		if(type==1){
+			var idsJson = getIdSelections();
+			for(var o in idsJson){
+				if(o==0){
+					ids+=idsJson[o];
+				}else{
+					ids+=","+idsJson[o];
+				}
+
+			}
+		}
+		if(ids==""){
+			toastr.msg("warning", "请选择一条或者多条记录!")
+			return;
+		}
+		$.ajax({
+			url: "/deleteUser",//"",
+			type: "post",
+			dataType: "json",
+			data: {ids:ids},
+			success: function (data) {
+				if(data==true){
+					if(type==1){
+						ids = getIdSelections();
+					}else{
+						ids=[ids];
+					}
+					$('#table').bootstrapTable('remove', {
+						field: 'id',
+						values: ids
+					});
+				}
+			}
+		});
+	}
+
+	$(window).resize(function () {
+		$('#table').bootstrapTable('resetView', {
+			height: getHeight()
+		});
+	});
+
+	function checkUserName(username){
+		var isCheck = false;
+		$.ajax({
+			url: "/checkUserName",//"",
+			async: false,
+			type: "post",
+			data: {username:username},
+			success: function (data) {
+				isCheck = data;
+			}
+		});
+		return isCheck;
+	}
+
+    $(document).ready(function(){
+		getUserListJson();
+		$('#table').bootstrapTable('resetView', {
+			height: getHeight()
+		});
+		$("#userConfigForm").ajaxForm({
+			url : '/saveUser',
+			type : 'post',
+			beforeSubmit : function(formData, jqForm, options) { //提交前的回调函数
+				var username=jqForm[0].username.value;
+				var oldusername=jqForm[0].oldusername.value;
+				if(username){
+					if(username!=oldusername){
+						if(!checkUserName(username)){
+							toastr.msg("warning", "用户名已存在，请重新输入!")
+							$("#username").focus();
+							return false;
+						}
+					}
+				}
+				$("#userConfigForm").data('bootstrapValidator').validate();
+				return $("#userConfigForm").data('bootstrapValidator').isValid();
+			},
+			success : function(responseText, StatusText) {
+				if(responseText=="true"){
+					toastr.msg("success", "操作成功！", function(){
+						$("#userWinId").modal('hide');
+						getUserListJson();
+					})
+				}
+			}
+		});
+		$('#userConfigForm').bootstrapValidator({
+			message: 'This value is not valid',
+			feedbackIcons: {
+				valid: 'glyphicon glyphicon-ok',
+				invalid: 'glyphicon glyphicon-remove',
+				validating: 'glyphicon glyphicon-refresh'
+			},
+			fields: {
+				username: {
+					message: 'The username is not valid',
+					validators: {
+						notEmpty: {
+							message: '用户名不可为空'
+						},
+						stringLength: {
+							min: 6,
+							max: 30,
+							message: '用户名限制长度为6 - 30个字符'
+						},
+						regexp: {
+							regexp: /^[a-zA-Z0-9_\.]+$/,
+							message: '用户名只能由字母、数字、点和下划线组成'
+						}
+					}
+				},
+				password: {
+					validators: {
+						notEmpty: {
+							message: '密码不可为空'
+						},
+						stringLength: {
+							min: 6,
+							max: 30,
+							message: '密码限制长度为6 - 30个字符'
+						}
+					}
+				}
+			}
+		});
+    });
+	</script>
+</head>
+	<% include ../topMenu.ejs %>
+	<% include ../leftMenu.ejs %>
+	<div id="rightframeDiv" class="layout_right">
+		<div class="layout_content_main" style="margin-left: 160px;">
+			<div id="content_layout_body_left_content" class="layout_content_main_warp">
+				<div id="nowLocation" class="layout_location"><span class="nowLocation_ico"><img src="images/personal.png"></span><span class="nowLocation_content">用户管理 &gt; 用户列表</span></div>
+				<div class="layout_content_main_content clearfix">
+					<div class="rightbar">
+						<div id="toolbar">
+							<button id="add" class="btn btn-success" onclick="showUserConfig();">
+					            <i class="glyphicon glyphicon-plus"></i>新增
+					        </button>
+					        <button id="remove" class="btn btn-danger" onclick="deleteUser('', 1)">
+					            <i class="glyphicon glyphicon-remove"></i>删除
+					        </button>
+					    </div>
+					    <table id="table"
+					       data-toolbar="#toolbar"
+				           data-toggle="table"
+				           data-pagination="true"
+				           data-search="true"
+				           data-advanced-search="true"
+				           data-page-size="10"
+				           data-page-list="[10,20,30]"
+				           data-pagination-first-text="首页"
+				           data-pagination-pre-text="上一页"
+				           data-pagination-next-text="下一页"
+				           data-pagination-last-text="末页"
+				           data-row-style="rowStyle">
+					        <thead>
+					        <tr>
+								<th data-field="state" data-checkbox="true"></th>
+					            <th data-field="username" data-sortable="true">用户名</th>
+					            <th data-field="password" data-sortable="true">密码</th>
+								<th data-field="id" data-sortable="true">用户ID</th>
+								<th data-field=""
+									data-formatter="operateFormatter"
+									data-events="operateEvents">操作</th>
+					        </tr>
+					        </thead>
+				    	</table>
+					</div>
+                    <div class="noneDiv w100b h100b"></div>
+		    	</div>
+			</div>
+        </div>
+    </div>
+	<% include ../footerPage.ejs %>
+	
+	<!-- 模态框（Modal） -->
+	<div class="modal fade modalId" tabindex="-1" role="dialog"
+	   aria-labelledby="myModalLabel" aria-hidden="true" >
+	   <div class="modal-dialog">
+	      <div class="modal-content">
+	         <div class="modal-header">
+	            <button type="button" class="close" 
+	               data-dismiss="modal" aria-hidden="true">
+	                  &times;
+	            </button>
+	            <h4 class="modal-title">
+	                 	用户配置
+	            </h4>
+	         </div>
+	         <div class="modal-body">
+				 <% include ../user/userConfig.ejs %>
+	         	<!--<jsp:include page="../user/userConfig.jsp"></jsp:include>-->
+	         </div>
+	         <div class="modal-footer">
+	            <button type="button" class="btn btn-default" 
+	               data-dismiss="modal">关闭
+	            </button>
+	            <button type="button" class="btn btn-primary" onclick="saveUser();">
+	               	确定
+	            </button>
+	         </div>
+	      </div><!-- /.modal-content -->
+	   </div>
+	</div><!-- /.modal -->
+	
+</html>

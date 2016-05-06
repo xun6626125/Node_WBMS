@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= title %></title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+    <link type="text/css" rel="stylesheet" href="/stylesheets/login.css"  />
+    <script type="text/javascript" src="/common/jquery/jquery-1.7.2.min.js"></script>
+    <script type="text/javascript" src="/common/artdialog/artDialog.source.js"></script>
+    <script type="text/javascript" src="/common/artdialog/plugins/iframeTools.source.js"></script>
+    <script type="text/javascript" src="/common/js/commonUtil.js"></script>
+    <script>
+      function showAddUser(){
+        alert(1111);
+      }
+    </script>
+  </head>
+  <body onload="setFocus();">
+    <form id="form" name="form" method="post" action="/login" onsubmit="return checkUserPwd()">
+    <input type="hidden" name="languageType" id="languageType" value=""/>
+    <div class="login">
+      <div class="bg">
+        <div class="logo" style="width:0px;"></div>
+        <div class="logo_text"><a href="#">某公司CRM系统11</a></div>
+        <div class="clear"></div>
+        <div class="fill">
+          <input type=text name="username" id="username" class="input1" placeholder="用户名"/>
+          <div style="margin-top: 43px;"></div>
+          <input type="password" name="password" id="password" class="input2" placeholder="密码"/>
+        </div>
+        <div class="error">
+		    	<span id='loginError'>
+                  <% if (locals.error&&locals.error.length) { %>
+                     <%= locals.error %>
+                  <% } %>
+                </span>
+        </div>
+        <p class="btn" style="margin-top: 50px;">
+          <button class="btn_login" style="cursor:pointer;">登录</button>
+        </p>
+        <div class="clear"></div>
+        <div class="copyright" style="margin-right: 130px;">
+          这只是一个测试的版本系统，随便搞的静态页面，方便测试
+        </div>
+      </div>
+    </div>
+    </form>
+  </body>
+</html>

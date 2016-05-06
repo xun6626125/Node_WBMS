@@ -1,0 +1,60 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <script type="text/javascript">
+    var MENU_LIST = "/main"; //主菜单列表
+	var USER_LIST = "/userList"; //用户列表
+	var CONFIG = "LoginViewServlet?action=showConfig"; //上传
+  	$(document).ready(function(){
+		$(".menu ul li").click(function(){
+			var liId = $(this).attr("id");
+			location.href = showUrl(liId);
+		});
+		$(".start p").click(function(){
+			location.href = showUrl($(this).attr("id"));
+		});
+		
+		var mark = 2;
+		$(".start i").click(function(){
+			if(mark==1){
+				$(".menu").animate({left:"0"},"fast");
+				$(".layout_content_main").css("margin-left","160px");
+				mark=2;
+			}else if(mark==2){
+				$(".menu").stop().animate({left:"-110"},"fast");
+				$(".layout_content_main").css("margin-left","50px");
+				mark=1;
+			}
+		});
+	});
+	
+	function showUrl(liId){
+  		switch (liId) {
+  			case "menuList":return MENU_LIST;
+  			case "userList":return USER_LIST;
+  			case "2":return CONFIG;
+  		}
+  	}
+	</script>
+</head>
+<body>
+    <div class="menu" style="left:0px;">
+    	<div class="start" style="background-color: #E48965;cursor: pointer;">
+        	<p id="menuList" style="margin-right: 50px;">菜单列表</p> <i class="xiaode">&#xe6e5;</i>
+        </div>
+    	<ul>
+    		<li id="userList"><p>用户管理</p><i class="xiaode">&#xe6a7;</i></li>
+        	<li id="2"><p>我的任务</p><i class="xiaode">&#xe65a;</i></li>
+            <li><p>需求产能管理</p><i class="xiaode">&#xe683;</i></li>
+            <li><p>BOM管理</p><i class="xiaode">&#xe64d;</i></li>
+            <li><p>配置管理</p><i class="xiaode">&#xe68e;</i></li>
+            <li><p>变更管理</p><i class="xiaode">&#xe63e;</i></li>
+            <li><p>个人设置</p><i class="xiaode">&#xe6b0;</i></li>
+        </ul>
+        <!--<script type="text/javascript">
+        var activationId = "${requestScope.activationId}";
+        if(activationId!="menuList")$("#"+activationId).addClass('selected');
+        </script>-->
+    </div>
+</body>
+</html>
